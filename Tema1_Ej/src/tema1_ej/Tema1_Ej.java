@@ -12,6 +12,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -144,16 +146,30 @@ public class Tema1_Ej {
     }
 
     public void divLinea(File fPath, int nDiv) {
+int cont=0;
+        try (Scanner sc = new Scanner(fPath)) {
+            while (sc.hasNext()) {
 
-        
-        
+                try (PrintWriter fich = new PrintWriter(fPath.getAbsolutePath() +cont+ ".txt")) {
+                    for (int i = 0; i < nDiv; i++) {
+
+                        fich.println(sc.nextLine());
+                    }
+                    cont++;
+                }
+                
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         String fragmento = "Testeo";
-        int nDiv = 5;
-        boolean nOl = true;
+        int nDiv = 2;
+        boolean nOl = false;
 
 //		File f = new File("C:\\Users\\Zer0\\Desktop");
 //		Ejercicios ej2 = new Ejercicios();
