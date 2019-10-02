@@ -122,69 +122,93 @@ public class Tema1_Ej {
 //		} catch (IOException x) {
 //			System.err.println("Error en el archivo");
 //		}
-    public void ejercicio6(File fPath, int nDiv, boolean nOl) {
-        if (nOl == true) {
-            divCaracter(fPath, nDiv);
-        } else {
-            divLinea(fPath, nDiv);
-        }
-    }
-
-    public void divCaracter(File fPath, int nDiv) {
-        char[] buffer = new char[nDiv];
-        int i, cont = 1;
-        try (FileReader fin = new FileReader(fPath)) {
-            while ((i = fin.read(buffer)) != -1) {
-                try (FileWriter fout = new FileWriter(fPath.getAbsolutePath().replace(".txt", " ") + cont + ".txt")) {
-                    fout.write(buffer, 0, i);
-                    cont++;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void divLinea(File fPath, int nDiv) {
-int cont=0;
-        try (Scanner sc = new Scanner(fPath)) {
-            while (sc.hasNext()) {
-
-                try (PrintWriter fich = new PrintWriter(fPath.getAbsolutePath() +cont+ ".txt")) {
-                    for (int i = 0; i < nDiv; i++) {
-
-                        fich.println(sc.nextLine());
-                    }
-                    cont++;
-                }
-                
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
+    
+//    public void ejercicio6(File fPath, int nDiv, boolean nOl) {
+//        if (nOl == true) {
+//            divCaracter(fPath, nDiv);
+//        } else {
+//            divLinea(fPath, nDiv);
+//        }
+//    }
+//    public void divCaracter(File fPath, int nDiv) {
+//        char[] buffer = new char[nDiv];
+//        int i, cont = 1;
+//        try (FileReader fin = new FileReader(fPath)) {
+//            while ((i = fin.read(buffer)) != -1) {
+//                try (FileWriter fout = new FileWriter(fPath.getAbsolutePath().replace(".txt", " ") + cont + ".txt")) {
+//                   try{
+//                    fout.write(buffer, 0, i);
+//                   }catch(Exception e){
+//                       fout.write("");
+//                   }
+//                    cont++;
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            
+//        }
+//    }
+//    public void divLinea(File fPath, int nDiv) {
+//        int cont = 0;
+//        try (Scanner sc = new Scanner(fPath)) {
+//            while (sc.hasNext()) {
+//
+//                try (PrintWriter fich = new PrintWriter(fPath.getAbsolutePath().replace(".txt", " ") + cont + ".txt")) {
+//                    for (int i = 0; i < nDiv; i++) {
+//                 try{
+//                            fich.println(sc.nextLine());
+//                 }catch(Exception e){
+//                     fich.println("");
+//                 } 
+//                    }
+//                    cont++;
+//                }
+//
+//            }
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
+//    public void unirFich(String[] array) {
+//        try (PrintWriter fich = new PrintWriter("C:\\Users\\Zer0\\Desktop\\fusion.txt")) {
+//            for (String array1 : array) {
+//                File fichi = new File(array1);
+//                try (Scanner sc = new Scanner(fichi)) {
+//                    while (sc.hasNext()) {
+//                        fich.println(sc.nextLine());
+//                    }
+//                }
+//            }
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         String fragmento = "Testeo";
         int nDiv = 2;
         boolean nOl = false;
-
-//		File f = new File("C:\\Users\\Zer0\\Desktop");
-//		Ejercicios ej2 = new Ejercicios();
-//		ej2.ejercicio2(f);
+        String[] arrayFich = new String[2];
+        arrayFich[0] = "C:\\Users\\Zer0\\Desktop\\test_file 0.txt";
+        arrayFich[1] = "C:\\Users\\Zer0\\Desktop\\test_file 1.txt";
         File fPath = new File("C:\\Users\\Zer0\\Desktop\\test_file.txt");
-//		Ejercicios ej3 = new Ejercicios();
-//		char letra = 'a';
-//		ej3.ejercicio3(fPath, letra);
 
-//		Ejercicios ej4 = new Ejercicios();
-//		ej4.ejercicio4(fPath);
-//		Ejercicios ej5 = new Ejercicios();
-//		ej5.ejercicio5(fPath, fragmento);
-        Tema1_Ej ej6 = new Tema1_Ej();
-        ej6.ejercicio6(fPath, nDiv, nOl);
+//        File f = new File("C:\\Users\\Zer0\\Desktop");
+//        Ejercicios ej2 = new Ejercicios();
+//        ej2.ejercicio2(f);
+//        Ejercicios ej3 = new Ejercicios();
+//        char letra = 'a';
+//        ej3.ejercicio3(fPath, letra);
+//        Ejercicios ej4 = new Ejercicios();
+//        ej4.ejercicio4(fPath);
+//        Ejercicios ej5 = new Ejercicios();
+//        ej5.ejercicio5(fPath, fragmento);
+//        Tema1_Ej ej6 = new Tema1_Ej();
+//        ej6.ejercicio6(fPath, nDiv, nOl);
+//        ej6.unirFich(arrayFich);
 
     }
 }
