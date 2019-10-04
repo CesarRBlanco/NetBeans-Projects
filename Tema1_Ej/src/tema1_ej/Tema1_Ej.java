@@ -22,21 +22,20 @@ import java.util.logging.Logger;
  */
 public class Tema1_Ej {
 
-    public void ejercicio2(File path) {
-        File[] FList = path.listFiles();
-
-        for (File f : FList) {
-            System.out.println(f.getAbsolutePath());
-            if (f.isDirectory()) {
-                File[] FList2 = f.listFiles();
-                for (File f2 : FList2) {
-                    System.out.println(f2.getAbsolutePath());
-                }
+    public void ejercicio2(File f, String separador) {
+        File[] ficheros = f.listFiles();
+        for (int x = 0; x < ficheros.length; x++) {
+            System.out.println(ficheros[x].getAbsolutePath());
+            if (ficheros[x].isDirectory()) {
+                String nuevo_separador;
+                nuevo_separador = separador + " ";
+                ejercicio2(ficheros[x], nuevo_separador);
             }
         }
     }
 
-    public int ejercicio3(File fPath, char letra)  {
+//------------------------------------------------------------------------------
+    public int ejercicio3(File fPath, char letra) {
         int cont = 0;
         try (FileReader fRead = new FileReader(fPath)) {
 
@@ -49,12 +48,13 @@ public class Tema1_Ej {
             }
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
-            cont=-1;
+            cont = -1;
         }
         System.out.println();
         System.out.println(cont);
         return cont;
     }
+//------------------------------------------------------------------------------
 
     public void ejercicio4(File fPath) throws IOException {
         ArrayList<Abecedario> abc = new ArrayList<>();
@@ -72,7 +72,7 @@ public class Tema1_Ej {
                     abc.add(caracter);
                 }
             }
-            
+
 //            while ((i = fRead.read()) != -1) {
 //                aux=new Abecedario((char)i);
 //                if (abc.contains(aux)) {
@@ -81,8 +81,6 @@ public class Tema1_Ej {
 //                    abc.add(aux);
 //                }
 //            }
-            
-            
         } finally {
             int max = 0;
             char maxChar = '-';
@@ -93,12 +91,11 @@ public class Tema1_Ej {
                 }
             }
             System.out.println("El caracter mas repetido es " + maxChar);
+
         }
     }
-	
 
-
-     class Abecedario {
+    class Abecedario {
 
         char letra = '-';
         int cont = 1;
@@ -126,13 +123,14 @@ public class Tema1_Ej {
         }
 
     }
+//------------------------------------------------------------------------------
 
     public void ejercicio5(File fPath, String fragmento) {
-       
+
         String frase;
         int cont = 0;
         try (Scanner sc = new Scanner(fPath)) {
-              while (sc.hasNext()) {
+            while (sc.hasNext()) {
                 cont++;
                 frase = sc.nextLine();
                 if ((frase.toLowerCase()).contains(fragmento.toLowerCase())) {
@@ -143,7 +141,7 @@ public class Tema1_Ej {
             System.err.println("Error en el archivo");
         }
     }
-    
+//------------------------------------------------------------------------------
 
     public void ejercicio6(File fPath, int nDiv, boolean nOl) {
         if (nOl == true) {
@@ -158,18 +156,13 @@ public class Tema1_Ej {
         int i, cont = 1;
         try (FileReader fin = new FileReader(fPath)) {
             while ((i = fin.read(buffer)) != -1) {
-                try (FileWriter fout = new FileWriter(fPath.getAbsolutePath().replace(".txt", " ") + cont + ".txt")) {
-                    try {
-                        fout.write(buffer, 0, i);
-                    } catch (Exception e) {
-                        fout.write("");
-                    }
+                try (FileWriter fout = new FileWriter(fPath.getAbsolutePath().replace(fPath.getName(), cont + "_" + fPath.getName()))) {
+                    fout.write(buffer, 0, i);
                     cont++;
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
@@ -177,39 +170,40 @@ public class Tema1_Ej {
         int cont = 0;
         try (Scanner sc = new Scanner(fPath)) {
             while (sc.hasNext()) {
-
-                try (PrintWriter fich = new PrintWriter(fPath.getAbsolutePath().replace(".txt", " ") + cont + ".txt")) {
-                    for (int i = 0; i < nDiv; i++) {
+                try (PrintWriter fich = new PrintWriter(fPath.getAbsolutePath().replace(fPath.getName(), cont + "_" + fPath.getName()))) {
+                    for (int i = 0; i < nDiv && sc.hasNext(); i++) {
                         try {
                             fich.println(sc.nextLine());
                         } catch (Exception e) {
-                            fich.println("");
                         }
                     }
                     cont++;
-                }
 
+                }
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tema1_Ej.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
-    public void unirFich(String[] array, String ficheroSalida) {
+    public void unirFich(String[] array) {
         try (PrintWriter fich = new PrintWriter("C:\\Users\\Zer0\\Desktop\\fusion.txt")) {
             for (String array1 : array) {
-                File fichi = new File(array1);
-                try (Scanner sc = new Scanner(fichi)) {
+                //File fichi = new File(array1);
+                try (Scanner sc = new Scanner(new File(array1))) {
                     while (sc.hasNext()) {
                         fich.println(sc.nextLine());
+
                     }
                 }
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tema1_Ej.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
+//------------------------------------------------------------------------------
 
     public void ejercicio7(File fPath, char opcion) {
         switch (opcion) {
@@ -239,8 +233,10 @@ public class Tema1_Ej {
                 cont++;
             }
             sc.close();
+
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tema1_Ej.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -260,21 +256,23 @@ public class Tema1_Ej {
     public void opcionDM() {
 
     }
+//------------------------------------------------------------------------------
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         String fragmento = "Testeo";
-        int nDiv = 2;
+        int nDiv = 1;
         boolean nOl = false;
         String[] arrayFich = new String[2];
-        arrayFich[0] = "C:\\Users\\Zer0\\Desktop\\test_file 0.txt";
-        arrayFich[1] = "C:\\Users\\Zer0\\Desktop\\test_file 1.txt";
+        arrayFich[0] = "C:\\Users\\Zer0\\Desktop\\0_test_file.txt";
+        arrayFich[1] = "C:\\Users\\Zer0\\Desktop\\1_test_file.txt";
         File fPath = new File("C:\\Users\\Zer0\\Desktop\\test_file.txt");
         File f = new File("C:\\Users\\Zer0\\Desktop");
         char opcion = 'n';
+        
 
-        Tema1_Ej ej2 = new Tema1_Ej();
-        ej2.ejercicio2(f);
+//        Tema1_Ej ej2 = new Tema1_Ej();
+//        ej2.ejercicio2(f,"");
 //        Tema1_Ej ej3 = new Tema1_Ej();
 //        char letra = 'a';
 //        ej3.ejercicio3(fPath, letra);
@@ -282,9 +280,9 @@ public class Tema1_Ej {
 //        ej4.ejercicio4(fPath);
 //        Tema1_Ej ej5 = new Tema1_Ej();
 //        ej5.ejercicio5(fPath, fragmento);
-//        Tema1_Ej ej6 = new Tema1_Ej();
-//        ej6.ejercicio6(fPath, nDiv, nOl);
-//        ej6.unirFich(arrayFich);
+        Tema1_Ej ej6 = new Tema1_Ej();
+        ej6.ejercicio6(fPath, nDiv, nOl);
+        ej6.unirFich(arrayFich);
 //        Tema1_Ej ej7 = new Tema1_Ej();
 //        ej7.ejercicio7(fPath, opcion);
     }
