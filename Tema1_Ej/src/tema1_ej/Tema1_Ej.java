@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -211,29 +212,39 @@ public class Tema1_Ej {
                 opcionN(fPath);
                 break;
             case 'A':
-                opcionA();
+                opcionAM(fPath);
                 break;
             case 'D':
-                opcionD();
+                opcionDM(fPath);
                 break;
             case 'a':
-                opcionAM();
+                opcionA(fPath);
                 break;
             case 'd':
-                opcionDM();
+                opcionD(fPath);
                 break;
         }
     }
 
     public void opcionN(File fPath) {
-        int cont = 0;
+        int cont = 0, cont2 = 0;
+        try (Scanner sc = new Scanner(fPath)) {
+            while (sc.hasNextLine()) {
+                sc.nextLine();
+                cont2++;
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tema1_Ej.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
         try (Scanner sc = new Scanner(fPath)) {
             while (sc.hasNext()) {
-                System.out.println(cont);
+                sc.next();
                 cont++;
             }
             sc.close();
 
+            System.out.printf("Hay %s palabras y %s lineas", cont, cont2);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Tema1_Ej.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -241,19 +252,37 @@ public class Tema1_Ej {
 
     }
 
-    public void opcionA() {
+    public void opcionAM(File fPath) {
+        ArrayList<String> al = new ArrayList<>();
+        try (Scanner sc = new Scanner(fPath)) {
+            while (sc.hasNextLine()) {
+                al.add(sc.nextLine());  
+            }
+            Collections.sort(al);
+            System.out.println(al);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void opcionDM(File fPath) {
+       ArrayList<String> al = new ArrayList<>();
+        try (Scanner sc = new Scanner(fPath)) {
+            while (sc.hasNextLine()) {
+                al.add(sc.nextLine());  
+            }
+            Collections.sort(al,Collections.reverseOrder());
+            System.out.println(al);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void opcionA(File fPath) {
 
     }
 
-    public void opcionD() {
-
-    }
-
-    public void opcionAM() {
-
-    }
-
-    public void opcionDM() {
+    public void opcionD(File fPath) {
 
     }
 //------------------------------------------------------------------------------
@@ -268,8 +297,7 @@ public class Tema1_Ej {
         arrayFich[1] = "C:\\Users\\Zer0\\Desktop\\1_test_file.txt";
         File fPath = new File("C:\\Users\\Zer0\\Desktop\\test_file.txt");
         File f = new File("C:\\Users\\Zer0\\Desktop");
-        char opcion = 'n';
-        
+        char opcion = 'D';
 
 //        Tema1_Ej ej2 = new Tema1_Ej();
 //        ej2.ejercicio2(f,"");
@@ -280,10 +308,10 @@ public class Tema1_Ej {
 //        ej4.ejercicio4(fPath);
 //        Tema1_Ej ej5 = new Tema1_Ej();
 //        ej5.ejercicio5(fPath, fragmento);
-        Tema1_Ej ej6 = new Tema1_Ej();
-        ej6.ejercicio6(fPath, nDiv, nOl);
-        ej6.unirFich(arrayFich);
-//        Tema1_Ej ej7 = new Tema1_Ej();
-//        ej7.ejercicio7(fPath, opcion);
+//        Tema1_Ej ej6 = new Tema1_Ej();
+//        ej6.ejercicio6(fPath, nDiv, nOl);
+//        ej6.unirFich(arrayFich);
+        Tema1_Ej ej7 = new Tema1_Ej();
+        ej7.ejercicio7(fPath, opcion);
     }
 }
