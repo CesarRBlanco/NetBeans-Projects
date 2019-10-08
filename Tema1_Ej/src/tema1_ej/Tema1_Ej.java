@@ -408,6 +408,7 @@ public class Tema1_Ej {
         try {
             in = new FileInputStream(fOut);
             int i;
+            
             try {
                 while ((i = in.read()) != -1) {
 
