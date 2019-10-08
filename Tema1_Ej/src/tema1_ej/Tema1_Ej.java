@@ -6,7 +6,9 @@
 package tema1_ej;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -256,7 +258,7 @@ public class Tema1_Ej {
         ArrayList<String> al = new ArrayList<>();
         try (Scanner sc = new Scanner(fPath)) {
             while (sc.hasNextLine()) {
-                al.add(sc.nextLine());  
+                al.add(sc.nextLine());
             }
             Collections.sort(al);
             System.out.println(al);
@@ -266,12 +268,12 @@ public class Tema1_Ej {
     }
 
     public void opcionDM(File fPath) {
-       ArrayList<String> al = new ArrayList<>();
+        ArrayList<String> al = new ArrayList<>();
         try (Scanner sc = new Scanner(fPath)) {
             while (sc.hasNextLine()) {
-                al.add(sc.nextLine());  
+                al.add(sc.nextLine());
             }
-            Collections.sort(al,Collections.reverseOrder());
+            Collections.sort(al, Collections.reverseOrder());
             System.out.println(al);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
@@ -279,10 +281,146 @@ public class Tema1_Ej {
     }
 
     public void opcionA(File fPath) {
+        ArrayList<String> al = new ArrayList<>();
+        try (Scanner sc = new Scanner(fPath)) {
+            while (sc.hasNextLine()) {
+                al.add(sc.nextLine());
+            }
+            Collections.sort(al, String.CASE_INSENSITIVE_ORDER);
+            System.out.println(al);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
     public void opcionD(File fPath) {
+        ArrayList<String> al = new ArrayList<>();
+        try (Scanner sc = new Scanner(fPath)) {
+            while (sc.hasNextLine()) {
+                al.add(sc.nextLine());
+            }
+            Collections.sort(al, String.CASE_INSENSITIVE_ORDER);
+            Collections.reverse(al);
+            System.out.println(al);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+//------------------------------------------------------------------------------
+
+    public void ejercicio8(File fIn, File fOut, boolean wayKey) throws IOException {
+
+        if (wayKey) {
+            FileInputStream in = null;
+            FileOutputStream out = null;
+            try {
+                in = new FileInputStream(fIn);
+                out = new FileOutputStream(fOut, true);
+                int i;
+                while ((i = in.read()) != -1) {
+                    out.write(i);
+                }
+            } catch (IOException e) {
+
+            } finally {
+                if (in != null) {
+                    in.close();
+                }
+                if (out != null) {
+                    out.close();
+                }
+            }
+        } else {
+            FileInputStream in = null;
+            FileOutputStream out = null;
+            int i;
+            byte[] buffer = new byte[1000];
+            while ((i = in.read(buffer)) != -1) {
+                out.write(buffer, 0, i);
+            }
+            out.close();
+            in.close();
+        }
+    }
+//------------------------------------------------------------------------------
+
+    public void ejercicio9(File fOut) throws IOException {
+        menuEj9(fOut);
+    }
+
+    public void menuEj9(File fOut) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        int option;
+        do {
+
+            System.out.println("Select an option");
+            option = sc.nextInt();
+            switch (option) {
+                case 1:
+                    altaAlumnos(fOut);
+                    break;
+                case 2:
+                    consultaAlumnos(fOut);
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+            }
+        } while (option != 5);
+    }
+
+    public void altaAlumnos(File fOut) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        String nombre;
+        int fechaNacimiento, codigo;
+        byte[] nombreByte;
+        byte fechaByte, codigoByte;
+
+        System.out.println("Nombre alumno:");
+        nombre = sc.nextLine();
+        System.out.println("Fecha de nacimiento:");
+        fechaNacimiento = sc.nextInt();
+        System.out.println("Codigo de alumno:");
+        codigo = sc.nextInt();
+
+        nombreByte = nombre.getBytes();
+        fechaByte = (byte) fechaNacimiento;
+        codigoByte = (byte) codigo;
+
+        FileOutputStream out = null;
+        out = new FileOutputStream(fOut);
+        try {
+            out.write(nombreByte);
+            out.write(fechaByte);
+            out.write(codigoByte);
+        } catch (IOException ex) {
+            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        out.close();
+    }
+
+    public void consultaAlumnos(File fOut) {
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream(fOut);
+            int i;
+            try {
+                while ((i = in.read()) != -1) {
+
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 //------------------------------------------------------------------------------
@@ -297,7 +435,10 @@ public class Tema1_Ej {
         arrayFich[1] = "C:\\Users\\Zer0\\Desktop\\1_test_file.txt";
         File fPath = new File("C:\\Users\\Zer0\\Desktop\\test_file.txt");
         File f = new File("C:\\Users\\Zer0\\Desktop");
-        char opcion = 'D';
+        File fOut = new File("C:\\Users\\Zer0\\Desktop\\alumnos.dat");
+        File fIn = new File("C:\\Users\\Zer0\\Desktop");
+        char opcion = 'd';
+        boolean wayKey = true;
 
 //        Tema1_Ej ej2 = new Tema1_Ej();
 //        ej2.ejercicio2(f,"");
@@ -311,7 +452,11 @@ public class Tema1_Ej {
 //        Tema1_Ej ej6 = new Tema1_Ej();
 //        ej6.ejercicio6(fPath, nDiv, nOl);
 //        ej6.unirFich(arrayFich);
-        Tema1_Ej ej7 = new Tema1_Ej();
-        ej7.ejercicio7(fPath, opcion);
+//        Tema1_Ej ej7 = new Tema1_Ej();
+//        ej7.ejercicio7(fPath, opcion);
+//        Tema1_Ej ej8 = new Tema1_Ej();
+//        ej8.ejercicio8(fIn, fOut, wayKey);
+        Tema1_Ej ej9 = new Tema1_Ej();
+        ej9.ejercicio9(fOut);
     }
 }
