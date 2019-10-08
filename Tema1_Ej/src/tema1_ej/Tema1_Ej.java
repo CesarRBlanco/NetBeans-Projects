@@ -404,25 +404,11 @@ public class Tema1_Ej {
     }
 
     public void consultaAlumnos(File fOut) {
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(fOut);
-            int i;
-            
-            try {
-                while ((i = in.read()) != -1) {
 
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        //DataInputStream
+        
+        
+        
     }
 //------------------------------------------------------------------------------
 
