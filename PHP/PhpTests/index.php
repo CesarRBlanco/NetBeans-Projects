@@ -53,12 +53,11 @@ and open the template in the editor.
         }
 
         piramidDraw();
+        echo "<br/>";
 
         function piramidHollow() {
             $base = 5;
-
             for ($cont = 1; $cont < $base + 1; $cont++) {
-
                 for ($cont3 = $base; $cont3 > $cont; $cont3--) {
                     echo "&nbsp";
                 }
@@ -66,13 +65,14 @@ and open the template in the editor.
                     if ($cont <= 2) {
                         echo"*";
                     }
-                    if ($cont >= 3 && ($cont2 == 0 || $cont2 == $cont - 1)) {
+                    if ($cont > 2 && ($cont2 == 0 || $cont2 == $cont - 1)) {
                         echo"*";
-                    } else {
+                    }
+                    if (($cont > 2 && ($cont2 > 0 && $cont2 < $cont - 1))) {
                         echo"&nbsp&nbsp";
                     }
                     if ($cont == $base) {
-                        for ($cont2 = 0; $cont2 < $cont-1; $cont2++) {
+                        for ($cont2 = 0; $cont2 < $cont - 1; $cont2++) {
                             echo"*";
                         }
                     }
@@ -81,8 +81,48 @@ and open the template in the editor.
             }
         }
 
-        echo "<br/>";
         piramidHollow();
+        echo "<br/>";
+
+        function binaryTraductor() {
+            $random = rand(0, 255);
+            echo $random;
+            echo " to binary is: ";
+            echo decbin($random);
+        }
+
+        binaryTraductor();
+        echo "<br/>";
+
+        function primeCheck($numberP) {
+
+            if ($numberP == 1){
+                return 0;
+            }
+            for ($i = 2; $i <= sqrt($numberP); $i++) {
+                if ($numberP % $i == 0){
+                    return 0;
+                }
+            }
+            return 1;
+        }
+
+        function checkPrime() {
+            $numberP = rand(0, 100);
+            $flag = primeCheck($numberP);
+            echo $numberP;
+            echo " is ";
+            if ($flag == 1){
+                
+                echo "Prime";
+            }
+            else{
+                
+                echo "Not Prime";
+            }
+        }
+
+        checkPrime();
         ?>
     </body>
 </html>
