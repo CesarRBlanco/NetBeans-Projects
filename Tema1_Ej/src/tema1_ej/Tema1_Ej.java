@@ -5,6 +5,9 @@
  */
 package tema1_ej;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -364,10 +367,10 @@ public class Tema1_Ej {
                     consultaAlumnos(fOut);
                     break;
                 case 3:
-
+                    modificarAlumnos();
                     break;
                 case 4:
-
+                    borrarAlumnos();
                     break;
             }
         } while (option != 5);
@@ -387,30 +390,40 @@ public class Tema1_Ej {
         System.out.println("Codigo de alumno:");
         codigo = sc.nextInt();
 
-        nombreByte = nombre.getBytes();
-        fechaByte = (byte) fechaNacimiento;
-        codigoByte = (byte) codigo;
-
-        FileOutputStream out = null;
-        out = new FileOutputStream(fOut);
+ 
+        DataOutputStream out = null;
+        out = new DataOutputStream(new FileOutputStream(fOut));
         try {
-            out.write(nombreByte);
-            out.write(fechaByte);
-            out.write(codigoByte);
+            out.writeInt(fechaNacimiento);
+            out.writeUTF(nombre);
+            out.writeInt(codigo);
         } catch (IOException ex) {
             Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
         }
         out.close();
     }
 
-    public void consultaAlumnos(File fOut) {
-
-        //DataInputStream
-        
-        
-        
+    public void consultaAlumnos(File fOut) throws FileNotFoundException, IOException {
+        try (DataInputStream dataIn = new DataInputStream(new FileInputStream(fOut))) {
+            System.out.println(dataIn.readInt());
+            System.out.println(dataIn.readUTF());
+            System.out.println(dataIn.readInt());
+        } catch (EOFException e) {
+            //... Nos saltara este mensaje
+            System.out.println("Fin del fichero");
+        } catch (IOException e) {
+            System.out.println("Error E/S");
+        }
     }
-//------------------------------------------------------------------------------
+
+    public void modificarAlumnos() {
+
+    }
+
+    public void borrarAlumnos() {
+
+    }
+//------------------------------------------------------------------------------//------------------------------------------------------------------------------
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
