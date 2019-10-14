@@ -54,6 +54,7 @@ and open the template in the editor.
 
         piramidDraw();
         echo "<br/>";
+        echo "<br/>";
 
         function piramidHollow() {
             $base = 5;
@@ -93,14 +94,15 @@ and open the template in the editor.
 
         binaryTraductor();
         echo "<br/>";
+        echo "<br/>";
 
         function primeCheck($numberP) {
 
-            if ($numberP == 1){
+            if ($numberP == 1) {
                 return 0;
             }
             for ($i = 2; $i <= sqrt($numberP); $i++) {
-                if ($numberP % $i == 0){
+                if ($numberP % $i == 0) {
                     return 0;
                 }
             }
@@ -112,17 +114,32 @@ and open the template in the editor.
             $flag = primeCheck($numberP);
             echo $numberP;
             echo " is ";
-            if ($flag == 1){
-                
+            if ($flag == 1) {
+
                 echo "Prime";
-            }
-            else{
-                
+            } else {
+
                 echo "Not Prime";
             }
         }
 
         checkPrime();
+        echo"<br/>";
+
+        function sumatorio() {
+            $numberR = 5;
+            $suma = 0;
+            $restante = $numberR;
+            echo $numberR;
+            echo "<br/>";
+            for ($i = $numberR; $i > 1; $i--) {
+                $suma = $suma + $restante;
+                $restante = $numberR - 1;
+            }
+            echo $suma;
+        }
+
+        sumatorio();
         ?>
     </body>
 </html>
