@@ -390,12 +390,11 @@ public class Tema1_Ej {
         System.out.println("Codigo de alumno:");
         codigo = sc.nextInt();
 
- 
         DataOutputStream out = null;
         out = new DataOutputStream(new FileOutputStream(fOut));
         try {
-            out.writeInt(fechaNacimiento);
             out.writeUTF(nombre);
+            out.writeInt(fechaNacimiento);
             out.writeInt(codigo);
         } catch (IOException ex) {
             Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
