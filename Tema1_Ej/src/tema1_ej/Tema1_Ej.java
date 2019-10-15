@@ -69,24 +69,13 @@ public class Tema1_Ej {
             char ch;
             Abecedario aux;
             while ((i = fRead.read()) != -1) {
-                ch = (char) i;
-                if (abc.contains(new Abecedario(ch))) {
-                    abc.get(abc.indexOf(new Abecedario(ch))).suma();
-
+                aux = new Abecedario((char) i);
+                if (abc.contains(aux)) {
+                    abc.get(abc.indexOf(aux)).suma();
                 } else {
-                    Abecedario caracter = new Abecedario(ch);
-                    abc.add(caracter);
+                    abc.add(aux);
                 }
             }
-
-//            while ((i = fRead.read()) != -1) {
-//                aux=new Abecedario((char)i);
-//                if (abc.contains(aux)) {
-//                    abc.get(abc.indexOf(aux)).suma();
-//                } else {
-//                    abc.add(aux);
-//                }
-//            }
         } finally {
             int max = 0;
             char maxChar = '-';
@@ -97,12 +86,10 @@ public class Tema1_Ej {
                 }
             }
             System.out.println("El caracter mas repetido es " + maxChar);
-
         }
     }
 
     class Abecedario {
-
         char letra = '-';
         int cont = 1;
 
@@ -348,15 +335,14 @@ public class Tema1_Ej {
     }
 //------------------------------------------------------------------------------
 
-    public void ejercicio9(File fOut) throws IOException {
-        menuEj9(fOut);
+    public void ejercicio9(File fOut, int codeSearch) throws IOException {
+        menuEj9(fOut, codeSearch);
     }
 
-    public void menuEj9(File fOut) throws IOException {
+    public void menuEj9(File fOut, int codeSearch) throws IOException {
         Scanner sc = new Scanner(System.in);
         int option;
         do {
-
             System.out.println("Select an option");
             option = sc.nextInt();
             switch (option) {
@@ -364,10 +350,10 @@ public class Tema1_Ej {
                     altaAlumnos(fOut);
                     break;
                 case 2:
-                    consultaAlumnos(fOut);
+                    consultaAlumnos(fOut, codeSearch);
                     break;
                 case 3:
-                    modificarAlumnos();
+                    modificarAlumnos(fOut, codeSearch);
                     break;
                 case 4:
                     borrarAlumnos();
@@ -389,9 +375,8 @@ public class Tema1_Ej {
         fechaNacimiento = sc.nextInt();
         System.out.println("Codigo de alumno:");
         codigo = sc.nextInt();
-
         DataOutputStream out = null;
-        out = new DataOutputStream(new FileOutputStream(fOut));
+        out = new DataOutputStream(new FileOutputStream(fOut,true));
         try {
             out.writeUTF(nombre);
             out.writeInt(fechaNacimiento);
@@ -402,21 +387,34 @@ public class Tema1_Ej {
         out.close();
     }
 
-    public void consultaAlumnos(File fOut) throws FileNotFoundException, IOException {
+    public void consultaAlumnos(File fOut, int codeSearch) throws FileNotFoundException, IOException {
         try (DataInputStream dataIn = new DataInputStream(new FileInputStream(fOut))) {
-            System.out.println(dataIn.readInt());
-            System.out.println(dataIn.readUTF());
-            System.out.println(dataIn.readInt());
+            while (true) {
+                String name = dataIn.readUTF();
+                int birth = dataIn.readInt();
+                int code = dataIn.readInt();
+                if (code == codeSearch) {
+
+                }
+            }
         } catch (EOFException e) {
-            //... Nos saltara este mensaje
             System.out.println("Fin del fichero");
-        } catch (IOException e) {
-            System.out.println("Error E/S");
         }
     }
 
-    public void modificarAlumnos() {
+    public void modificarAlumnos(File fOut, int codeSearch) throws FileNotFoundException, IOException {
+        try (DataInputStream dataIn = new DataInputStream(new FileInputStream(fOut))) {
+            while (true) {
+                String name = dataIn.readUTF();
+                int birth = dataIn.readInt();
+                int code = dataIn.readInt();
+                if (code == codeSearch) {
 
+                }
+            }
+        } catch (EOFException e) {
+            System.out.println("Fin del fichero");
+        }
     }
 
     public void borrarAlumnos() {
@@ -426,9 +424,16 @@ public class Tema1_Ej {
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
+        
+        // ---
         String fragmento = "Testeo";
         int nDiv = 1;
         boolean nOl = false;
+        char opcion = 'd';
+        boolean wayKey = true;
+        int codeSearch = 0001;
+        
+        // ---
         String[] arrayFich = new String[2];
         arrayFich[0] = "C:\\Users\\Zer0\\Desktop\\0_test_file.txt";
         arrayFich[1] = "C:\\Users\\Zer0\\Desktop\\1_test_file.txt";
@@ -436,26 +441,25 @@ public class Tema1_Ej {
         File f = new File("C:\\Users\\Zer0\\Desktop");
         File fOut = new File("C:\\Users\\Zer0\\Desktop\\alumnos.dat");
         File fIn = new File("C:\\Users\\Zer0\\Desktop");
-        char opcion = 'd';
-        boolean wayKey = true;
-
-//        Tema1_Ej ej2 = new Tema1_Ej();
-//        ej2.ejercicio2(f,"");
-//        Tema1_Ej ej3 = new Tema1_Ej();
-//        char letra = 'a';
-//        ej3.ejercicio3(fPath, letra);
-//        Tema1_Ej ej4 = new Tema1_Ej();
-//        ej4.ejercicio4(fPath);
-//        Tema1_Ej ej5 = new Tema1_Ej();
-//        ej5.ejercicio5(fPath, fragmento);
-//        Tema1_Ej ej6 = new Tema1_Ej();
-//        ej6.ejercicio6(fPath, nDiv, nOl);
-//        ej6.unirFich(arrayFich);
-//        Tema1_Ej ej7 = new Tema1_Ej();
-//        ej7.ejercicio7(fPath, opcion);
-//        Tema1_Ej ej8 = new Tema1_Ej();
-//        ej8.ejercicio8(fIn, fOut, wayKey);
+        
+        // --- 
+        Tema1_Ej ej2 = new Tema1_Ej();
+        ej2.ejercicio2(f, "");
+        Tema1_Ej ej3 = new Tema1_Ej();
+        char letra = 'a';
+        ej3.ejercicio3(fPath, letra);
+        Tema1_Ej ej4 = new Tema1_Ej();
+        ej4.ejercicio4(fPath);
+        Tema1_Ej ej5 = new Tema1_Ej();
+        ej5.ejercicio5(fPath, fragmento);
+        Tema1_Ej ej6 = new Tema1_Ej();
+        ej6.ejercicio6(fPath, nDiv, nOl);
+        ej6.unirFich(arrayFich);
+        Tema1_Ej ej7 = new Tema1_Ej();
+        ej7.ejercicio7(fPath, opcion);
+        Tema1_Ej ej8 = new Tema1_Ej();
+        ej8.ejercicio8(fIn, fOut, wayKey);
         Tema1_Ej ej9 = new Tema1_Ej();
-        ej9.ejercicio9(fOut);
+        ej9.ejercicio9(fOut,codeSearch);
     }
 }
