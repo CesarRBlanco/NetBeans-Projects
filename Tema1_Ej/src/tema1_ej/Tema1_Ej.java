@@ -6,8 +6,6 @@
 package tema1_ej;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,14 +17,17 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import javax.activation.FileDataSource;
 
 /**
  *
  * @author Zer0
  */
 public class Tema1_Ej {
+
+    Scanner sc = new Scanner(System.in);
 
     public void ejercicio2(File f, String separador) {
         File[] ficheros = f.listFiles();
@@ -90,6 +91,7 @@ public class Tema1_Ej {
     }
 
     class Abecedario {
+
         char letra = '-';
         int cont = 1;
 
@@ -175,8 +177,6 @@ public class Tema1_Ej {
                 }
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class
-                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -192,8 +192,6 @@ public class Tema1_Ej {
                 }
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class
-                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 //------------------------------------------------------------------------------
@@ -226,8 +224,6 @@ public class Tema1_Ej {
                 cont2++;
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class
-                    .getName()).log(Level.SEVERE, null, ex);
         }
         try (Scanner sc = new Scanner(fPath)) {
             while (sc.hasNext()) {
@@ -238,8 +234,6 @@ public class Tema1_Ej {
 
             System.out.printf("Hay %s palabras y %s lineas", cont, cont2);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class
-                    .getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -253,7 +247,6 @@ public class Tema1_Ej {
             Collections.sort(al);
             System.out.println(al);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -266,7 +259,6 @@ public class Tema1_Ej {
             Collections.sort(al, Collections.reverseOrder());
             System.out.println(al);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -279,7 +271,6 @@ public class Tema1_Ej {
             Collections.sort(al, String.CASE_INSENSITIVE_ORDER);
             System.out.println(al);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -294,7 +285,6 @@ public class Tema1_Ej {
             Collections.reverse(al);
             System.out.println(al);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 //------------------------------------------------------------------------------
@@ -335,96 +325,141 @@ public class Tema1_Ej {
     }
 //------------------------------------------------------------------------------
 
-    public void ejercicio9(File fOut, int codeSearch) throws IOException {
-        menuEj9(fOut, codeSearch);
+    public void ejercicio9(File fOut) throws IOException {
+        menuEj9(fOut);
     }
 
-    public void menuEj9(File fOut, int codeSearch) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        int option;
+    public void menuEj9(File fOut) throws IOException {
+        int opcion;
         do {
-            System.out.println("Select an option");
-            option = sc.nextInt();
-            switch (option) {
+            System.out.println("Seleciona una opción");
+            opcion = sc.nextInt();
+            switch (opcion) {
                 case 1:
                     altaAlumnos(fOut);
                     break;
                 case 2:
-                    consultaAlumnos(fOut, codeSearch);
+                    consultaAlumnos(fOut);
                     break;
                 case 3:
-                    modificarAlumnos(fOut, codeSearch);
+                    modificarAlumno(fOut);
                     break;
                 case 4:
-                    borrarAlumnos();
                     break;
             }
-        } while (option != 5);
+        } while (opcion != 5);
     }
 
     public void altaAlumnos(File fOut) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        String nombre;
-        int fechaNacimiento, codigo;
-        byte[] nombreByte;
-        byte fechaByte, codigoByte;
 
-        System.out.println("Nombre alumno:");
+        String nombre;
+        int fecha, codigo;
+        FileOutputStream dataOut = null;
+        DataOutputStream out = null;
+
+        System.out.println("Nombre del alumno:");
+        sc.nextLine();
         nombre = sc.nextLine();
         System.out.println("Fecha de nacimiento:");
-        fechaNacimiento = sc.nextInt();
+        fecha = sc.nextInt();
         System.out.println("Codigo de alumno:");
         codigo = sc.nextInt();
-        DataOutputStream out = null;
-        out = new DataOutputStream(new FileOutputStream(fOut,true));
         try {
+            dataOut = new FileOutputStream(fOut, true);
+            out = new DataOutputStream(dataOut);
             out.writeUTF(nombre);
-            out.writeInt(fechaNacimiento);
+            out.writeInt(fecha);
             out.writeInt(codigo);
-        } catch (IOException ex) {
-            Logger.getLogger(Tema1_Ej.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            System.err.println(e);
+        } finally {
+            out.close();
         }
-        out.close();
     }
 
-    public void consultaAlumnos(File fOut, int codeSearch) throws FileNotFoundException, IOException {
-        try (DataInputStream dataIn = new DataInputStream(new FileInputStream(fOut))) {
-            while (true) {
-                String name = dataIn.readUTF();
-                int birth = dataIn.readInt();
-                int code = dataIn.readInt();
-                if (code == codeSearch) {
+    public void consultaAlumnos(File fOut) throws FileNotFoundException, IOException {
+        FileInputStream fin = null;
+        DataInputStream in = null;
 
+        try {
+            fin = new FileInputStream(fOut);
+            in = new DataInputStream(fin);
+            try {
+                while (true) {
+                    System.out.printf("Nombre:%s, Fecha de nacimiento:%d, Codigo:%03d. \n",
+                            in.readUTF(), in.readInt(), in.readInt());
                 }
+            } catch (EOFException e) {
+                System.out.println("Fin de fichero");
             }
-        } catch (EOFException e) {
-            System.out.println("Fin del fichero");
+        } finally {
+            in.close();
+            fin.close();
         }
     }
 
-    public void modificarAlumnos(File fOut, int codeSearch) throws FileNotFoundException, IOException {
-        try (DataInputStream dataIn = new DataInputStream(new FileInputStream(fOut))) {
-            while (true) {
-                String name = dataIn.readUTF();
-                int birth = dataIn.readInt();
-                int code = dataIn.readInt();
-                if (code == codeSearch) {
+    public void modificarAlumno(File fOut) throws FileNotFoundException, IOException {
+        String nombreReserv="";
+        int fechaReserv=0, codigoReserv=0, codigoBusca;
+        FileInputStream fin = null;
+        DataInputStream in = null;
+        FileOutputStream dataOut = null;
+        DataOutputStream out = null;
 
+        codigoBusca = sc.nextInt();
+        try {
+            fin = new FileInputStream(fOut);
+            in = new DataInputStream(fin);
+            dataOut = new FileOutputStream(fOut,true);
+            out = new DataOutputStream(dataOut);
+            try {
+                while (true) {
+                    nombreReserv = in.readUTF();
+                    fechaReserv = in.readInt();
+                    codigoReserv = in.readInt();
+                    if (codigoReserv == codigoBusca) {
+                        System.out.printf("Nombre:%s, Fecha de nacimiento:%d, Codigo:%03d. \n",
+                                nombreReserv, fechaReserv, codigoReserv);
+                        System.out.println("Introduce los nuevos datos.");
+                        System.out.println("Nombre del alumno:");
+                        sc.nextLine();
+                        nombreReserv = sc.nextLine();
+                        System.out.println("Fecha de nacimiento:");
+                        fechaReserv = sc.nextInt();
+                        System.out.println("Codigo de alumno:");
+                        codigoReserv = sc.nextInt();
+                    }
                 }
+
+            } catch (EOFException e) {
+                System.out.println("Fin de fichero");
             }
-        } catch (EOFException e) {
-            System.out.println("Fin del fichero");
+            out.writeUTF(nombreReserv);
+            out.writeInt(fechaReserv);
+            out.writeInt(codigoReserv);
+
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+            if (fin != null) {
+                fin.close();
+            }
+
+            if (out != null) {
+                out.close();
+            }
+            if (dataOut != null) {
+                dataOut.close();
+            }
+
         }
     }
-
-    public void borrarAlumnos() {
-
-    }
-//------------------------------------------------------------------------------//------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
-        
+
         // ---
         String fragmento = "Testeo";
         int nDiv = 1;
@@ -432,7 +467,7 @@ public class Tema1_Ej {
         char opcion = 'd';
         boolean wayKey = true;
         int codeSearch = 0001;
-        
+
         // ---
         String[] arrayFich = new String[2];
         arrayFich[0] = "C:\\Users\\Zer0\\Desktop\\0_test_file.txt";
@@ -441,25 +476,32 @@ public class Tema1_Ej {
         File f = new File("C:\\Users\\Zer0\\Desktop");
         File fOut = new File("C:\\Users\\Zer0\\Desktop\\alumnos.dat");
         File fIn = new File("C:\\Users\\Zer0\\Desktop");
-        
+
         // --- 
-        Tema1_Ej ej2 = new Tema1_Ej();
-        ej2.ejercicio2(f, "");
-        Tema1_Ej ej3 = new Tema1_Ej();
-        char letra = 'a';
-        ej3.ejercicio3(fPath, letra);
-        Tema1_Ej ej4 = new Tema1_Ej();
-        ej4.ejercicio4(fPath);
-        Tema1_Ej ej5 = new Tema1_Ej();
-        ej5.ejercicio5(fPath, fragmento);
-        Tema1_Ej ej6 = new Tema1_Ej();
-        ej6.ejercicio6(fPath, nDiv, nOl);
-        ej6.unirFich(arrayFich);
-        Tema1_Ej ej7 = new Tema1_Ej();
-        ej7.ejercicio7(fPath, opcion);
-        Tema1_Ej ej8 = new Tema1_Ej();
-        ej8.ejercicio8(fIn, fOut, wayKey);
+//        Tema1_Ej ej2 = new Tema1_Ej();
+//        ej2.ejercicio2(f, "");
+//        
+//        Tema1_Ej ej3 = new Tema1_Ej();
+//        char letra = 'a';
+//        ej3.ejercicio3(fPath, letra);
+//        
+//        Tema1_Ej ej4 = new Tema1_Ej();
+//        ej4.ejercicio4(fPath);
+//        
+//        Tema1_Ej ej5 = new Tema1_Ej();
+//        ej5.ejercicio5(fPath, fragmento);
+//        
+//        Tema1_Ej ej6 = new Tema1_Ej();
+//        ej6.ejercicio6(fPath, nDiv, nOl);
+//        ej6.unirFich(arrayFich);
+//        
+//        Tema1_Ej ej7 = new Tema1_Ej();
+//        ej7.ejercicio7(fPath, opcion);
+//        
+//        Tema1_Ej ej8 = new Tema1_Ej();
+//        ej8.ejercicio8(fIn, fOut, wayKey);
+//        
         Tema1_Ej ej9 = new Tema1_Ej();
-        ej9.ejercicio9(fOut,codeSearch);
+        ej9.ejercicio9(fOut);
     }
 }
