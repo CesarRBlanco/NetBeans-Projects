@@ -14,6 +14,7 @@ and open the template in the editor.
 
 
         ?>
+        
         <form action="Forms_Ejs2.php" method="post">
         <p>Rellena el siguiente formulario</p>
         <p>Nombre: <input type="text" name="nombre"/></p>
