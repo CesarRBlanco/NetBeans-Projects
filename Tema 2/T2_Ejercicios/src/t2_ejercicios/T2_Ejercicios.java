@@ -31,59 +31,51 @@ public class T2_Ejercicios {
         return doc;
     }
 
-    public void mostrarTitulos(Document doc) {
-        NodeList titulos = doc.getElementsByTagName("titulo");
+    public void getDato(Node doc, String tag) {
+        String dato = "";
+        NodeList titulos = ((Element) doc).getElementsByTagName(tag);
         for (int i = 0; i < titulos.getLength(); i++) {
-            System.out.println(titulos.item(i).getFirstChild().getNodeValue());
-        }
-    }
-
-    public String getDato(Node doc, String tag) {
-        Element ee = (Element) doc;
-        NodeList lista = ee.getElementsByTagName(tag);
-        if (lista.getLength() > 0) {
-            return lista.item(0).getFirstChild().getNodeValue();
-        } else {
-            return null;
-        }
-    }
-
-    public void datosPelicula(Document doc, String pelicula) {
-        Element padre;
-        NodeList aux;
-        NodeList titulos = doc.getElementsByTagName("titulo");
-        for (int i = 0; i < titulos.getLength(); i++) {
-            if (titulos.item(i).getFirstChild().getNodeValue().equals(pelicula)) {
-                padre = (Element) titulos.item(i).getParentNode();
-                aux = padre.getElementsByTagName("genero");
-                if (aux.getLength() > 0) {
-                    System.out.println(aux.item(0).getFirstChild().getNodeValue());
+            if (titulos.item(i).hasChildNodes()) {
+                NodeList sons = titulos.item(i).getChildNodes();
+                for (int j = 0; j < sons.getLength(); j++) {
+                    System.out.println(sons.item(j).getFirstChild().getNodeValue());
                 }
-                aux = padre.getElementsByTagName("nombre");
-                if (aux.getLength() > 0) {
-                    System.out.println(aux.item(0).getFirstChild().getNodeValue());
-                }
-                aux = padre.getElementsByTagName("apellido");
-                if (aux.getLength() > 0) {
-                    System.out.println(aux.item(0).getFirstChild().getNodeValue());
-                }
-                break;
+            }else{
+                System.out.println(titulos.item(i).getFirstChild().getNodeValue());
             }
         }
+//        return dato;
     }
 
-    public void datosPelicula(Document doc) {
-        Element padre;
-        NodeList aux;
-        NodeList titulos = doc.getElementsByTagName("titulo");
-        NodeList directores = doc.getElementsByTagName("nombre");
-        String pelicula;
-        for (int i = 0; i < titulos.getLength(); i++) {
-            pelicula = titulos.item(i).getFirstChild().getNodeValue();
-            System.out.println(pelicula);
-            datosPelicula(doc, pelicula);
+    public void datosPeliculas(Document doc) {
 
+        String titulo, nombre, apellido;
+        NodeList nombreDirector = doc.getElementsByTagName("pelicula");
+        for (int i = 0; i < nombreDirector.getLength(); i++) {
+         getDato(nombreDirector.item(i), "titulo");
+          getDato(nombreDirector.item(i), "nombre");
+            getDato(nombreDirector.item(i), "apellido");
+//            System.out.println("Titulo: " + titulo + "\nNombre: " + nombre + "\nApellido: " + apellido);
+            System.out.println("-------------------");
         }
+
+//        NodeList nombreDirector = doc.getElementsByTagName("nombre");
+//        int arraysize=nombreDirector.getLength();
+//        String[] nombre=new String[arraysize];
+//        String[] apellidos=new String[arraysize];
+//        for (int j = 0; j < nombreDirector.getLength(); j++) {
+//            nombre[j] = nombreDirector.item(j).getFirstChild().getNodeValue();
+//        }
+//        NodeList apellidosDirector = doc.getElementsByTagName("apellido");
+//        for (int j2 = 0; j2 < apellidosDirector.getLength(); j2++) {
+//            apellidos[j2] = apellidosDirector.item(j2).getFirstChild().getNodeValue();
+//        }
+//
+////        mostrarTitulos(doc);
+//        for (int i = 0; i < nombre.length; i++) {
+//        System.out.println("nombre: " + nombre[i] + "\napellido:" + apellidos[i]);
+//        System.out.println("-------------------");
+//        }
     }
 
     public static void main(String[] args) {
@@ -91,8 +83,7 @@ public class T2_Ejercicios {
         Document doc = null;
         T2_Ejercicios gestorArbol = new T2_Ejercicios();
         doc = gestorArbol.crearArbol(ruta);
-//        gestorArbol.mostrarTitulos(doc);
-        gestorArbol.datosPelicula(doc);
+        gestorArbol.datosPeliculas(doc);
     }
 
 }
