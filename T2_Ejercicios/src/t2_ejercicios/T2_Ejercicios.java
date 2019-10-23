@@ -55,7 +55,7 @@ public class T2_Ejercicios {
         for (int i = 0; i < titulos.getLength(); i++) {
             if (titulos.item(i).getFirstChild().getNodeValue().equals(pelicula)) {
                 padre = (Element) titulos.item(i).getParentNode();
-                aux = padre.getElementsByTagName("titulo");
+                aux = padre.getElementsByTagName("genero");
                 if (aux.getLength() > 0) {
                     System.out.println(aux.item(0).getFirstChild().getNodeValue());
                 }
