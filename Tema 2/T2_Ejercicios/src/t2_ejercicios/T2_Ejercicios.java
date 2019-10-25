@@ -31,31 +31,35 @@ public class T2_Ejercicios {
         return doc;
     }
 
-    public void getDato(Node doc, String tag) {
-        String dato = "";
+    public String[] getDato(Node doc, String tag) {
+        String[] datos = null;
         NodeList titulos = ((Element) doc).getElementsByTagName(tag);
         for (int i = 0; i < titulos.getLength(); i++) {
-            if (titulos.item(i).hasChildNodes()) {
-                NodeList sons = titulos.item(i).getChildNodes();
-                for (int j = 0; j < sons.getLength(); j++) {
-                    System.out.println(sons.item(j).getFirstChild().getNodeValue());
-                }
-            }else{
-                System.out.println(titulos.item(i).getFirstChild().getNodeValue());
-            }
+            datos[i] = titulos.item(i).getFirstChild().getNodeValue().toString();
+            System.out.println(titulos.item(i).getFirstChild().getNodeValue());
         }
-//        return dato;
+        return datos;
     }
 
     public void datosPeliculas(Document doc) {
-
-        String titulo, nombre, apellido;
+        String[] titulo = null;
+        String[] nombre = null;
+        String[] apellido = null;
         NodeList nombreDirector = doc.getElementsByTagName("pelicula");
         for (int i = 0; i < nombreDirector.getLength(); i++) {
-         getDato(nombreDirector.item(i), "titulo");
-          getDato(nombreDirector.item(i), "nombre");
-            getDato(nombreDirector.item(i), "apellido");
-//            System.out.println("Titulo: " + titulo + "\nNombre: " + nombre + "\nApellido: " + apellido);
+            for (int j4 = 0; j4 < 5; j4++) {
+                titulo = getDato(nombreDirector.item(i), "titulo");
+            }
+            for (int j2 = 0; j2 < 5; j2++) {
+                nombre = getDato(nombreDirector.item(i), "nombre");
+            }
+
+            for (int j3 = 0; j3 < 5; j3++) {
+                apellido = getDato(nombreDirector.item(i), "apellido");
+            }
+            for (int x = 0; x < apellido.length; x++) {
+                System.out.println("Titulo: " + titulo + "\nNombre: " + nombre + "\nApellido: " + apellido);
+            }
             System.out.println("-------------------");
         }
 
