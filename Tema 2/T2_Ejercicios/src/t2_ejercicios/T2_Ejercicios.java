@@ -35,7 +35,7 @@ public class T2_Ejercicios {
         String[] datos = null;
         NodeList titulos = ((Element) doc).getElementsByTagName(tag);
         for (int i = 0; i < titulos.getLength(); i++) {
-            datos[i] = titulos.item(i).getFirstChild().getNodeValue().toString();
+            datos[i] = titulos.item(i).getFirstChild().getNodeValue();
             System.out.println(titulos.item(i).getFirstChild().getNodeValue());
         }
         return datos;
