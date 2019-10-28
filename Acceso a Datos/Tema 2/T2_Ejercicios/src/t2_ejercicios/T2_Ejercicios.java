@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -18,6 +19,7 @@ import org.w3c.dom.NodeList;
  */
 public class T2_Ejercicios {
 
+    //Creacion del arbol, no tocar.
     public Document crearArbol(String ruta) {
         Document doc = null;
         try {
@@ -31,38 +33,36 @@ public class T2_Ejercicios {
         return doc;
     }
 
-    public String[] getDato(Node doc, String tag) {
-        String[] datos = null;
+    //Metodo para acceder a los datos del XML
+    public void getDato(Node doc, String tag) {
+        //Conseguir los nodos que tengan el mismo tag que el que se pasa como parametro
         NodeList titulos = ((Element) doc).getElementsByTagName(tag);
+        NodeList padre;
+        NamedNodeMap atrib;
+        Node atribu;
         for (int i = 0; i < titulos.getLength(); i++) {
-            datos[i] = titulos.item(i).getFirstChild().getNodeValue();
+            if (titulos.item(i).getParentNode().equals("pelicula")) {
+                padre = (NodeList) titulos.item(i).getParentNode();
+                
+                atrib = padre.item(i).getAttributes();
+                atribu = atrib.item(i);
+                System.out.println(atribu.getNodeValue());
+            }
             System.out.println(titulos.item(i).getFirstChild().getNodeValue());
         }
-        return datos;
     }
 
     public void datosPeliculas(Document doc) {
-        String[] titulo = null;
-        String[] nombre = null;
-        String[] apellido = null;
         NodeList nombreDirector = doc.getElementsByTagName("pelicula");
         for (int i = 0; i < nombreDirector.getLength(); i++) {
-            for (int j4 = 0; j4 < 5; j4++) {
-                titulo = getDato(nombreDirector.item(i), "titulo");
-            }
-            for (int j2 = 0; j2 < 5; j2++) {
-                nombre = getDato(nombreDirector.item(i), "nombre");
-            }
 
-            for (int j3 = 0; j3 < 5; j3++) {
-                apellido = getDato(nombreDirector.item(i), "apellido");
-            }
-            for (int x = 0; x < apellido.length; x++) {
-                System.out.println("Titulo: " + titulo + "\nNombre: " + nombre + "\nApellido: " + apellido);
-            }
+            getDato(nombreDirector.item(i), "titulo");
+            getDato(nombreDirector.item(i), "genero");
+            getDato(nombreDirector.item(i), "nombre");
+            getDato(nombreDirector.item(i), "apellido");
             System.out.println("-------------------");
-        }
 
+        }
 //        NodeList nombreDirector = doc.getElementsByTagName("nombre");
 //        int arraysize=nombreDirector.getLength();
 //        String[] nombre=new String[arraysize];
@@ -80,6 +80,7 @@ public class T2_Ejercicios {
 //        System.out.println("nombre: " + nombre[i] + "\napellido:" + apellidos[i]);
 //        System.out.println("-------------------");
 //        }
+
     }
 
     public static void main(String[] args) {
