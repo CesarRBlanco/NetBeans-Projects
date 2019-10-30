@@ -19,10 +19,11 @@
 		2.  Completado.
 		3.  En proceso.
 		4.  No empezado.
-		5.  No empezado.
-		6.  No empezado.
+		5.  Completado.
+		6.  Completado.
 		7.  No empezado.
 		8.  No empezado.
 		9.  No empezado.
 		10. No empezado.
 		11. No empezado.
+		12. No empezado.
