@@ -17,21 +17,22 @@ and open the template in the editor.
             private $autor;
             private $titulo;
             private $paginas;
-            public static $referencia;
+            private $referencia2;
+            public static $referencia = 0;
 
-            public function __construct($autor, $titulo,$paginas) {
+            public function __construct($autor, $titulo, $paginas,$referencia2) {
                 $this->autor = $autor;
                 $this->titulo = $titulo;
-                $this->paginas=$paginas;
-                $this->referencia="";
-                
+                $this->paginas = $paginas;
+                $this->setReferencia();
+                $this->referencia2=$referencia2;
             }
 
-            public function setReferencia(){
-                
-                $this->referencia=referencia+1;
+            public function setReferencia() {
+
+                Libro::$referencia++;
             }
-            
+
             public function getAutor() {
                 return $this->autor;
             }
@@ -51,18 +52,21 @@ and open the template in the editor.
             public function printTitulo() {
                 print $this->titulo;
             }
-            
-            public function printLibro(){
-               
-                
-                print "Titulo: ".$this->titulo."<br>Autor: ".$this->autor."<br>Páginas: ".$this->paginas;
+
+            public function printLibro() {
+                if (Libro::$referencia2 != "") {
+                    print "Titulo: " . $this->titulo . "<br>Autor: " . $this->autor . "<br>Páginas: " . $this->paginas .  "<br>".$this->referencia2."<br><br>";
+                } else {
+                    print "Titulo: " . $this->titulo . "<br>Autor: " . $this->autor . "<br>Páginas: " . $this->paginas . "<br>Referencia: " . Libro::$referencia ."<br><br>";
+                }
             }
 
         }
 
-        $libro1 = new Libro("UwU", "But OwO inside","420");
+        $libro1 = new Libro("Libro Numero 1", "Autor Numero 1", "132","");
         $libro1->printLibro();
-        
+        $libro2 = new Libro("Libro2", "Autor2", "231","AJ43");
+        $libro2->printLibro();
         ?>
     </body>
 </html>
