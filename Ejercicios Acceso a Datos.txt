@@ -21,8 +21,8 @@
 		4.  No empezado.
 		5.  Completado.
 		6.  Completado.
-		7.  No empezado.
-		8.  No empezado.
+		7.  Completado.
+		8.  En proceso.
 		9.  No empezado.
 		10. No empezado.
 		11. No empezado.
