@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
@@ -205,28 +207,72 @@ public class T2_Ejercicios {
         }
     }
 
-    public void añadirPelicula(Document doc, String rutaSalida) throws ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException {
+    public void añadirPelicula(Document doc, String rutaSalida, String titul, String direc,String apell, String estre, String gener,String idiom) throws ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException {
 
-Anadir la pelicula al arbol, el resto ya lo graba en nuevo archivo
-        
+        try {
+// A partir del documento doc se crea un nodo película que contendrá los demás
+// elementos: titulo, director y estreno
+            Element nodoPelicula = doc.createElement("pelicula");
+// Se añade el atributo genero al elemento creado
+            nodoPelicula.setAttribute("año", estre);
+            nodoPelicula.setAttribute("genero", gener);
+            nodoPelicula.setAttribute("idioma", idiom);
+// Se añade a película un nodo tipo texto con un salto de línea (\n) para que
+// al abrirlo con un editor de texto cada nodo salga en un línea diferente.
+            nodoPelicula.appendChild(doc.createTextNode("\n"));
+// Se crean los nodos hijos de película añadiéndolo un nodo texto que contendrá el
+// valor del elemento y se le añaden a la película
+// Para titulo
+            Element nodoTitulo = doc.createElement("titulo");
+            Text textNodoTitulo = doc.createTextNode(titul);
+            nodoTitulo.appendChild(textNodoTitulo);
+            nodoPelicula.appendChild(nodoTitulo);
+// Se añade también un nodo text con un saldo de línea \n
+            nodoPelicula.appendChild(doc.createTextNode("\n"));// Para director
+            Element nodoDirector = doc.createElement("director");
+            nodoDirector.appendChild(doc.createTextNode("\n"));
+            Element nodoDirectorNombre = doc.createElement("nombre");
+            Text textNodoDirectorNombre = doc.createTextNode(direc);
+            nodoDirector.appendChild(doc.createTextNode("\n"));
+            Element nodoDirectorApellido = doc.createElement("apellido");
+            Text textNodoDirectorApellido = doc.createTextNode(apell);
+            nodoDirector.appendChild(textNodoDirectorNombre);
+            nodoDirector.appendChild(textNodoDirectorApellido);
+            nodoDirector.appendChild(nodoDirectorNombre);
+            nodoDirector.appendChild(nodoDirectorApellido);
+            nodoPelicula.appendChild(nodoDirector);
+
+// Se añade la película a películas, que es el primer nodo del documento
+            Node raiz = doc.getFirstChild();
+            raiz.appendChild(nodoPelicula);
 
 // Añadir al fichero DOM Nuevo
-        DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
-        DOMImplementationLS ls = (DOMImplementationLS) registry.getDOMImplementation("XML 3.0 LS 3.0");
+            DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+            DOMImplementationLS ls = (DOMImplementationLS) registry.getDOMImplementation("XML 3.0 LS 3.0");
 // Se crea un destino vacio
-        LSOutput output = ls.createLSOutput();
-        output.setEncoding("UTF-8");
+            LSOutput output = ls.createLSOutput();
+
+            output.setEncoding(
+                    "UTF-8");
 // Se establece el flujo de salida
-        output.setByteStream(new FileOutputStream(rutaSalida));
+            output.setByteStream(
+                    new FileOutputStream(rutaSalida));
 //output.setByteStream(System.out);
 // Permite escribir un documento DOM en XML
-        LSSerializer serializer = ls.createLSSerializer();
+            LSSerializer serializer = ls.createLSSerializer();
 // Se establecen las propiedades del serializador
-        serializer.setNewLine("\r\n");;
-        serializer.getDomConfig().setParameter("format-pretty-print", true);
+
+            serializer.setNewLine(
+                    "\r\n");;
+            serializer.getDomConfig()
+                    .setParameter("format-pretty-print", true);
 // Se escribe el documento ya sea en un fichero o en una cadena de texto
-        serializer.write(doc, output);
+            serializer.write(doc, output);
 // String xmlCad=serializer.writeToString(document);
+        } catch (DOMException e) {
+            return;
+        }
+
     }
 
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException {
@@ -238,11 +284,17 @@ Anadir la pelicula al arbol, el resto ya lo graba en nuevo archivo
         String titulo = "Matrix";
         String atributoNodo = "presupuesto";
         String atributovalor = "300.000.000 $";
+        String titul="Depredador";
+        String direc= "John";
+        String apell= "Tierman";
+        String estre="1987";
+        String gene="acción";
+        String idiom="en";
 //        gestorArbol.datosPeliculas(doc);
 //        gestorArbol.masDirectores(doc, 2);
 //        gestorArbol.getGeneros(doc);
 //        gestorArbol.añadirAtributo(doc, atributoNodo, atributovalor, titulo);
 //        gestorArbol.borrarAtributo(doc, atributoNodo, titulo);
-        gestorArbol.añadirPelicula(doc, rutaSalida);
+        gestorArbol.añadirPelicula(doc, rutaSalida,titul,direc,apell,estre,gene,idiom);
     }
 }
