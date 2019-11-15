@@ -169,7 +169,6 @@ public class T2_Ejercicios {
                         if (atribu.getNodeName().equals(atributoNodo)) {
                             cont--;
                         } else {
-//                            System.out.println(atribu.getNodeValue());
                             cont++;
                         }
                     }
@@ -209,59 +208,102 @@ public class T2_Ejercicios {
 
     public void añadirPelicula(Document doc, String rutaSalida, String titul, String direc, String apell, String estre, String gener, String idiom) throws ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException {
 
-        try {
-            Element nodoPelicula = doc.createElement("pelicula");
-            nodoPelicula.setAttribute("año", estre);
+        Element nodoPelicula = doc.createElement("pelicula");
+        nodoPelicula.setAttribute("año", estre);
 
-            nodoPelicula.setAttribute("genero", gener);
-            nodoPelicula.setAttribute("idioma", idiom);
-            nodoPelicula.appendChild(doc.createTextNode("\n"));
-            Element nodoTitulo = doc.createElement("titulo");
-            Text textNodoTitulo = doc.createTextNode(titul);
-            nodoTitulo.appendChild(textNodoTitulo);
-            nodoPelicula.appendChild(nodoTitulo);
-            nodoPelicula.appendChild(doc.createTextNode("\n"));
-            Element nodoDirector = doc.createElement("director");
-            nodoDirector.appendChild(doc.createTextNode("\n"));
-            Element nodoDirectorNombre = doc.createElement("nombre");
-            Text textNodoDirectorNombre = doc.createTextNode(direc);
-            nodoDirector.appendChild(doc.createTextNode("\n"));
-            Element nodoDirectorApellido = doc.createElement("apellido");
-            Text textNodoDirectorApellido = doc.createTextNode(apell);
-            nodoDirectorNombre.appendChild(textNodoDirectorNombre);
-            nodoDirector.appendChild(nodoDirectorNombre);
-            nodoDirectorApellido.appendChild(textNodoDirectorApellido);
-            nodoDirector.appendChild(nodoDirectorApellido);
-            nodoPelicula.appendChild(nodoDirector);
-            Node raiz = doc.getFirstChild();
-            raiz.appendChild(nodoPelicula);
+        nodoPelicula.setAttribute("genero", gener);
+        nodoPelicula.setAttribute("idioma", idiom);
+        nodoPelicula.appendChild(doc.createTextNode("\n"));
+        Element nodoTitulo = doc.createElement("titulo");
+        Text textNodoTitulo = doc.createTextNode(titul);
+        nodoTitulo.appendChild(textNodoTitulo);
+        nodoPelicula.appendChild(nodoTitulo);
+        nodoPelicula.appendChild(doc.createTextNode("\n"));
+        Element nodoDirector = doc.createElement("director");
+        nodoDirector.appendChild(doc.createTextNode("\n"));
+        Element nodoDirectorNombre = doc.createElement("nombre");
+        Text textNodoDirectorNombre = doc.createTextNode(direc);
+        nodoDirector.appendChild(doc.createTextNode("\n"));
+        Element nodoDirectorApellido = doc.createElement("apellido");
+        Text textNodoDirectorApellido = doc.createTextNode(apell);
+        nodoDirectorNombre.appendChild(textNodoDirectorNombre);
+        nodoDirector.appendChild(nodoDirectorNombre);
+        nodoDirectorApellido.appendChild(textNodoDirectorApellido);
+        nodoDirector.appendChild(nodoDirectorApellido);
+        nodoPelicula.appendChild(nodoDirector);
+        Node raiz = doc.getFirstChild();
+        raiz.appendChild(nodoPelicula);
 
-            DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
-            DOMImplementationLS ls = (DOMImplementationLS) registry.getDOMImplementation("XML 3.0 LS 3.0");
-            LSOutput output = ls.createLSOutput();
-            output.setEncoding(
-                    "UTF-8");
-            output.setByteStream(
-                    new FileOutputStream(rutaSalida));
-            LSSerializer serializer = ls.createLSSerializer();
-            serializer.setNewLine("\r\n");;
-            serializer.getDomConfig()
-                    .setParameter("format-pretty-print", true);
-            serializer.write(doc, output);
-
-        } catch (DOMException e) {
-            return;
-        }
+        grabar(doc, rutaSalida);
 
     }
 
-    public void cambioNombre(Document doc, String rutaSalida) throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException, ClassCastException {
-        try {
-            NodeList peliculas = doc.getElementsByTagName("titulo");
-            for (int j = 0; j < peliculas.getLength(); j++) {
+    public void cambioNombre(Document doc, String rutaSalida, String nombre, String nombreNew) throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException, ClassCastException {
+
+        NodeList directores = doc.getElementsByTagName("nombre");
+        for (int j = 0; j < directores.getLength(); j++) {
+            if (directores.item(j).getFirstChild().getNodeValue().equals("Larry")) {
+                directores.item(j).getFirstChild().setNodeValue("Lana");
+            }
+            grabar(doc, rutaSalida);
+        }
+    }
+
+    public void modificarDirectores(Document doc, String rutaSalida, String nombreNew, String apellNew) throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException, ClassCastException {
+        NodeList peliculas = doc.getElementsByTagName("titulo");
+        for (int i = 0; i < peliculas.getLength(); i++) {
+            if (peliculas.item(i).getFirstChild().getNodeValue().equals("Dune")) {
+                Element direc = doc.createElement("director");
+                peliculas.item(i).appendChild(doc.createTextNode("\n"));
+                Element nomb = doc.createElement("nombre");
+                Text nombTxt = doc.createTextNode(nombreNew);
+                nomb.appendChild(nombTxt);
+                direc.appendChild(nomb);
+                direc.appendChild(doc.createTextNode("\n"));
+                Element apell = doc.createElement("apellido");
+                Text apellTxt = doc.createTextNode(apellNew);
+                apell.appendChild(apellTxt);
+                direc.appendChild(apell);
+                peliculas.item(i).getParentNode().appendChild(direc);
 
             }
+        }
+        grabar(doc, rutaSalida);
 
+    }
+
+    public void borrarPeliculas(Document doc, String rutaSalida) throws FileNotFoundException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+
+        NodeList peliculas = doc.getElementsByTagName("titulo");
+        for (int i = 0; i < peliculas.getLength(); i++) {
+            if (peliculas.item(i).getFirstChild().getNodeValue().equals("Dune")) {
+                doc.getFirstChild().removeChild(peliculas.item(i).getParentNode());
+            }
+        }
+    }
+
+    public Document newArbol() {
+        Document doc = null;
+        Element empleadoNode = doc.createElement("empleado");
+        empleadoNode.setAttribute("id", "1");
+        empleadoNode.appendChild(doc.createTextNode("\n"));
+
+        String[] datosNode = new String[]{"nombre", "apellido", "apodo", "salario"};
+        String[] datosValue = new String[]{"Juan", "López Perez", "Juanin", "1000"};
+
+        for (int i = 0; i < datosNode.length; i++) {
+            Element nombreNode = doc.createElement(datosNode[i]);
+            Text nombreValue = doc.createTextNode(datosValue[i]);
+            nombreNode.appendChild(nombreValue);
+            empleadoNode.appendChild(nombreNode);
+            empleadoNode.appendChild(doc.createTextNode("\n"));
+        }
+        doc.appendChild(empleadoNode);
+        return doc;
+    }
+
+    public void grabar(Document doc, String rutaSalida) throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        try {
             DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
             DOMImplementationLS ls = (DOMImplementationLS) registry.getDOMImplementation("XML 3.0 LS 3.0");
             LSOutput output = ls.createLSOutput();
@@ -279,13 +321,6 @@ public class T2_Ejercicios {
             return;
         }
     }
-        
-        //    public void modificarDirectores(Document doc, String rutaSalida) throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException, ClassCastException {
-        //            }
-//    public void borrarPeliculas(Document doc) {
-//        NodeList peliculas = doc.getElementsByTagName("peliculas");
-
-//    }
 
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException {
         String ruta = "C:\\Users\\Zer0\\Desktop\\peliculas.xml";
@@ -302,13 +337,21 @@ public class T2_Ejercicios {
         String estre = "1987";
         String gene = "acción";
         String idiom = "en";
+        String nombNew = "Alfredo";
+        String apellNew = "Landa";
+        String nombre = "Larry";
+        String nombreNew = "Lana";
+
 //        gestorArbol.datosPeliculas(doc);
 //        gestorArbol.masDirectores(doc, 2);
 //        gestorArbol.getGeneros(doc);
 //        gestorArbol.añadirAtributo(doc, atributoNodo, atributovalor, titulo);
 //        gestorArbol.borrarAtributo(doc, atributoNodo, titulo);
 //        gestorArbol.añadirPelicula(doc, rutaSalida, titul, direc, apell, estre, gene, idiom);
-        gestorArbol.cambioNombre(doc, rutaSalida);
+//        gestorArbol.cambioNombre(doc, rutaSalida);
 //        gestorArbol.modificarDirectores(doc, rutaSalida);
+//        gestorArbol.borrarPeliculas(doc, rutaSalida);
+//        gestorArbol.modificarDirectores(doc, rutaSalida, nombNew, apellNew);
+//        gestorArbol.cambioNombre(doc, rutaSalida, nombre, nombreNew);
     }
 }
