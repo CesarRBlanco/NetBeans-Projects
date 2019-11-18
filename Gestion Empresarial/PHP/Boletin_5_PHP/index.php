@@ -1,99 +1,84 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <?php
+<?php
 
-        class Vehiculo {
+require 'Vehiculo.php';
+require 'Coche.php';
+require 'Dos_ruedas.php';
+require 'Camion.php';
+$coche = new Coche("negro", 1500);
+$coche->circula();
+$coche->añadir_persona(70);
 
-            private $color;
-            private $peso;
+print $coche->getColor();
+print "<br/>";
+print $coche->getPeso();
 
-            function getColor() {
-                return $this->color;
-            }
+print "<br/>";
+print "<br/>";
 
-            function getPeso() {
-                return $this->peso;
-            }
+$coche2 = new Coche("verde", 1500);
+$coche2->añadir_persona(65);
+$coche2->añadir_persona(65);
+print $coche2->getColor();
+print "<br/>";
+print $coche2->getPeso();
+print "<br/>";
+$coche2->repintar("rojo");
+$coche2->añadir_cadenas_nieve(2);
+print $coche2->getColor();
+print "<br/>";
+print $coche2->numero_cadenas_nieve;
 
-            function setColor($color) {
-                $this->color = $color;
-            }
+print "<br/>";
+print "<br/>";
 
-            function setPeso($peso) {
-                $this->peso = $peso;
-            }
+$moto = new Dos_ruedas("negro", 120);
+$moto->añadir_persona(80);
+$moto->poner_gasolina(20);
+print $moto->getColor();
+print "<br/>";
+print $moto->getPeso();
 
-            public function circula() {
-                
-            }
+print "<br/>";
+print "<br/>";
 
-            public function añadir_persona($peso_persona) {
-                
-            }
-            
-            public function Vehiculo(){
-                
-            }
+$camion = new Camion("azul", 10000);
+$camion->setPuertas(2);
+$camion->setLongitud(10);
+$camion->añadir_remolque(5);
+$camion->añadir_persona(80);
+print $camion->getColor();
+print "<br/>";
+print $camion->getPeso();
+print "<br/>";
+print $camion->getLongitud();
+print "<br/>";
+print $camion->getNumero_puertas();
 
-        }
-        
-//------------------------------------------------------------------------------        
-        class Cuatro_ruedas extends Vehiculo {
+print "<br/>";
+print "<br/>";
 
-            private $numero_puertas;
+$moto2=new Dos_ruedas("rojo",150);
+$moto2->añadir_persona(70);
+$moto2->repintar("verde");
+$moto2->setCilindrada(1000);
+Vehiculo::ver_atributo($moto2);
 
-            public function repintar($color) {
-                
-            }
+print "<br/>";
+print "<br/>";
 
-        }
+$camion2=new Camion("blanco",6000);
+$camion2->añadir_persona(84);
+$camion2->repintar("azul");
+$camion2->setPuertas(2);
+Vehiculo::ver_atributo($camion2);
 
-//------------------------------------------------------------------------------
-        class Dos_ruedas extends Vehiculo {
+print "<br/>";
+print "<br/>";
 
-            private $cilindrada;
+$coche3=new Coche("verde", 2100, 4);
+$coche3->añadir_cadenas_nieve(2);
+$coche3->añadir_persona(80);
+$coche3->repintar("azul");
 
-            public function poner_gasolina($litros) {
-                
-            }
-
-        }
-
-//------------------------------------------------------------------------------
-        class Coche extends Cuatro_ruedas {
-
-            private $numero_cadenas_nieve;
-
-            public function añadir_cadenas_nieve($num) {
-                
-            }
-
-            public function quitar_cadenas_nieve($num) {
-                
-            }
-
-        }
-
-//------------------------------------------------------------------------------        
-        class Camion extends Cuatro_ruedas {
-
-            private $longitud;
-
-            public function añadir_remolque($longiutd_remolque) {
-                
-            }
-
-        }
-        ?>
-    </body>
-</html>
+?>
+ 
