@@ -5,25 +5,22 @@
  */
 package t2_ejerciciossax;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
  *
  * @author Zer0
  */
-public class ParserSAXC extends DefaultHandler {
+public class ParserSAXD extends DefaultHandler {
 
     String qName = "";
     int cont = 0;
-    int n = 0;
-    String titulo="";
-
-    public ParserSAXC(int n) {
-        this.n = n;
-    }
+    String titulo = "";
+    List<String> generos = new ArrayList<>();
 
     @Override
     public void startDocument() throws SAXException {
@@ -32,42 +29,39 @@ public class ParserSAXC extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
+              System.out.println("Hay "+generos.size()+" generos.");
         System.out.println("Fin del documento XML");
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        this.qName=qName;
-        if (qName.equals("director")) {
-            cont++;
+            if (qName.equals("pelicula")) {
+        for (int i = 0; i < attributes.getLength(); i++) {
+
+                if (generos.contains(attributes.getQName(i))) {
+                    
+                } else {
+                    generos.add(attributes.getQName(i));
+                }
+                
+            }
+ 
         }
-        if (qName.equals("pelicula")) {
-            this.titulo="";
-        }
+         
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (qName.equals("pelicula")) {
-            if (cont>=n){
-                System.out.println("mi peli "+titulo);
-            }
-            cont=0;
-        }
-       this.qName="";
-        
-    }
-
-    @Override
-    public void characters(char[] ch, int start, int length) throws SAXException {
-        String cad = new String(ch, start, length);
-        if (qName.equals("titulo")) {
-           
-            this.titulo=cad;
-         
-        }
 
     }
 
     
+    
+    
+    @Override
+    public void characters(char[] ch, int start, int length) throws SAXException {
+        String cad = new String(ch, start, length);
+
+    }
+
 }
