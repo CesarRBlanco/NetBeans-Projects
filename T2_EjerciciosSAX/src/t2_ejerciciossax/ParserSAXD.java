@@ -21,6 +21,7 @@ public class ParserSAXD extends DefaultHandler {
     int cont = 0;
     String titulo = "";
     List<String> generos = new ArrayList<>();
+    List<String> nombres = new ArrayList<>();
 
     @Override
     public void startDocument() throws SAXException {
@@ -29,6 +30,9 @@ public class ParserSAXD extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
+        for(int i=0;i<generos.size();i++){
+//            System.out.println(att"");
+        }
               System.out.println("Hay "+generos.size()+" generos.");
         System.out.println("Fin del documento XML");
     }
