@@ -113,8 +113,8 @@ public class MariaDBExercises {
         cerrarConexion();
     }
 
-    public void consultaAlumnoPatronesCon(String nombre,String altura) throws SQLException {
-       String query = "SELECT nombre,altura FROM alumnos WHERE nombre LIKE ? and altura>?;";
+    public void consultaAlumnoPatronesCon(String nombre, String altura) throws SQLException {
+        String query = "SELECT nombre,altura FROM alumnos WHERE nombre LIKE ? and altura>?;";
         abrirConexion("add", "localhost", "root", "");
         Statement stmt = this.conexion.createStatement();
         if (this.ps == null) {
@@ -124,21 +124,38 @@ public class MariaDBExercises {
         ps.setString(2, "%" + altura + "%");
         ResultSet resultado = ps.executeQuery();
         while (resultado.next()) {
-            System.out.println("\t" + resultado.getString("nombre")+" "+resultado.getString("altura"));
-      
+            System.out.println("\t" + resultado.getString("nombre") + " - " + resultado.getString("altura"));
         }
         stmt.close();
         cerrarConexion();
     }
 
+    public void consultaAlumnoPatronesSin(String nombre, String altura) throws SQLException {
+        Statement sta = this.conexion.createStatement();
+        String query = String.format("SELECT nombre,altura FROM alumnos WHERE nombre LIKE '%s' and altura>%s;", nombre, altura);
+        abrirConexion("add", "localhost", "root", "");
+        if (this.ps == null) {
+            this.ps = this.conexion.prepareStatement(query);
+        }
+        this.ps = this.conexion.prepareStatement(query);
+        ResultSet resultado = ps.executeQuery();
+        while (resultado.next()) {
+            System.out.println("\t" + resultado.getString("nombre") + " - " + resultado.getString("altura"));
+        }
+        sta.close();
+        cerrarConexion();
+
+    }
+
     public static void main(String[] args) throws SQLException {
         MariaDBExercises mdb = new MariaDBExercises();
-//        mdb.abrirConexion("add", "127.0.0.1", "root", "");
+        mdb.abrirConexion("add", "127.0.0.1", "root", "");
 //        mdb.consultaAlumnosPatronNombre("h");
 //        mdb.insertarAlumno("10", "Natalie", "Paquette", "175", "20");
 //        mdb.insertarAsignatura("9", "Algo");
 //        mdb.consultaAlumnosAprobados();
-mdb.consultaAlumnoPatronesCon("h", "150");
+//        mdb.consultaAlumnoPatronesCon("h", "150");
+//        mdb.consultaAlumnoPatronesSin("%h%", "150");
 
     }
 
