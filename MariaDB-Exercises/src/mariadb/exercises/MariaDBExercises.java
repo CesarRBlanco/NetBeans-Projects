@@ -144,19 +144,35 @@ public class MariaDBExercises {
         }
         sta.close();
         cerrarConexion();
+    }
 
+    public void mostrarVistas() throws SQLException {
+        String query = "SHOW full tables where TAble_type='VIEW'"; // Consulta a ejecutar
+        abrirConexion("add", "localhost", "root", "");
+        Statement stmt = this.conexion.createStatement();
+        ResultSet rs = stmt.executeQuery(query); // Se ejecuta la consulta
+        while (rs.next()) { // Mientras queden filas en rs (el método next devuelve true) recorremos las filas
+            System.out.println("\t"+rs.getString("table_type"));
+            stmt.close(); // Se cierra el Statement
+            cerrarConexion();
+        }
     }
 
     public static void main(String[] args) throws SQLException {
         MariaDBExercises mdb = new MariaDBExercises();
         mdb.abrirConexion("add", "127.0.0.1", "root", "");
+        //1.
 //        mdb.consultaAlumnosPatronNombre("h");
+        //2.
 //        mdb.insertarAlumno("10", "Natalie", "Paquette", "175", "20");
 //        mdb.insertarAsignatura("9", "Algo");
+        //5b.
 //        mdb.consultaAlumnosAprobados();
+        //6.
 //        mdb.consultaAlumnoPatronesCon("h", "150");
 //        mdb.consultaAlumnoPatronesSin("%h%", "150");
-
+        //9d.
+        mdb.mostrarVistas();
     }
 
 }
