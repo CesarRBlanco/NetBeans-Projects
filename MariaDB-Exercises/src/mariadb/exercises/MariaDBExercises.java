@@ -6,9 +6,11 @@
 package mariadb.exercises;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -39,20 +41,6 @@ public class MariaDBExercises {
         } catch (SQLException e) {
             System.out.println("Error al cerrar la conexión: " + e.getLocalizedMessage());
         }
-    }
-
-    public void ejemplo(String bd) throws SQLException {
-        String query = "select * from aulas"; // Consulta a ejecutar
-        abrirConexion("add", "localhost", "root", "");
-        Statement stmt = this.conexion.createStatement();
-        ResultSet rs = stmt.executeQuery(query); // Se ejecuta la consulta
-        while (rs.next()) { // Mientras queden filas en rs (el método next devuelve true) recorremos las filas
-            System.out.println(rs.getInt(1) + "\t"
-                    + // Se obtiene datos en función del número de columna
-                    rs.getString("nombreAula") + "\t" + rs.getInt("puestos")); // o de su nombre
-        }
-        stmt.close(); // Se cierra el Statement
-        cerrarConexion(); // Se cierra la conexión
     }
 
     public void consultaAlumnosPatronNombre(String patron) throws SQLException {
@@ -152,18 +140,63 @@ public class MariaDBExercises {
         Statement stmt = this.conexion.createStatement();
         ResultSet rs = stmt.executeQuery(query); // Se ejecuta la consulta
         while (rs.next()) { // Mientras queden filas en rs (el método next devuelve true) recorremos las filas
-            System.out.println("\t"+rs.getString("table_type"));
+            System.out.println("\t" + rs.getString("table_type"));
             stmt.close(); // Se cierra el Statement
             cerrarConexion();
         }
     }
 
+    public void mostrarInfoPatron() {
+        try {
+            DatabaseMetaData md;
+            ResultSet tables, columns;
+            md = conexion.getMetaData();
+            tables = md.getTables("add", null, null, null);
+            while (tables.next()) {
+                if (tables.getString("TABLE_NAME").startsWith("a") && !tables.getString("TABLE_TYPE").equals("VIEW")) {
+
+                    columns = md.getColumns("add", null, tables.getString("TABLE_NAME"), null);
+                    while (columns.next()) {
+                        System.out.println("Table name: " + tables.getString("TABLE_NAME") + "\nDatabse name: " + "add" + "\nColumn position: " + columns.getInt("ORDINAL_POSITION")
+                                + "\nColumn name: " + columns.getString("COLUMN_NAME") + "\nData type: " + columns.getString("TYPE_NAME") + "\n" + "Column size: "
+                                + columns.getInt("COLUMN_SIZE") + "\nNulls: " + columns.getString("IS_NULLABLE") + "\nIncremented field: " + columns.getString("IS_AUTOINCREMENT"));
+                        System.out.println("**************************************");
+                    }
+
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error" + e.getLocalizedMessage());
+        }
+    }
+
+    public void mostrarConsultaEspecifica() {
+        try {
+            ResultSetMetaData rows;
+            ResultSet result;
+            Statement st;
+            String query = "select *, nombre as non from alumnos";
+            st = conexion.createStatement();
+            result = st.executeQuery(query);
+            rows = result.getMetaData();
+            System.out.println("Nombre\tAlias\tTipo_Dato\tAutoIncrement\tNull");
+            for (int i = 1; i <= rows.getColumnCount(); i++) {
+                System.out.println(String.format("%s \t%s \t%s \t%b \t%d", rows.getColumnName(i), rows.getColumnLabel(i), rows.getColumnTypeName(i), rows.isAutoIncrement(i), rows.isNullable(i)));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error" + e.getLocalizedMessage());
+        }
+
+    }
+
+ 
+
     public static void main(String[] args) throws SQLException {
         MariaDBExercises mdb = new MariaDBExercises();
         mdb.abrirConexion("add", "127.0.0.1", "root", "");
         //1.
-//        mdb.consultaAlumnosPatronNombre("h");
-        //2.
+        mdb.consultaAlumnosPatronNombre("h");
+//        2.
 //        mdb.insertarAlumno("10", "Natalie", "Paquette", "175", "20");
 //        mdb.insertarAsignatura("9", "Algo");
         //5b.
@@ -172,7 +205,13 @@ public class MariaDBExercises {
 //        mdb.consultaAlumnoPatronesCon("h", "150");
 //        mdb.consultaAlumnoPatronesSin("%h%", "150");
         //9d.
-        mdb.mostrarVistas();
+//        mdb.mostrarVistas();
+        //9g.
+//        mdb.mostrarInfoPatron();
+        //10.
+//        mdb.mostrarConsultaEspecifica();
+        //16.
+
     }
 
 }
